@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('status');
             $table->timestamps();
 
-            $table->foreign('sender_account_id')->references('id')->on('accounts');
-            $table->foreign('receiver_account_id')->references('id')->on('accounts');
+            $table->foreign('sender_account_id')->references('user_id')->on('accounts');
+            $table->foreign('receiver_account_id')->references('user_id')->on('accounts');
         });
     }
 

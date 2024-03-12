@@ -15,4 +15,13 @@ class Transaction extends Model
         'amount',
         'status'
     ];
+
+    public function sender_account(){
+        return $this->belongsTo(Account::class);
+    }
+
+    public function receiver_account(){
+        return $this->belongsTo(Account::class);
+    }
+
 }

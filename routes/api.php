@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +21,5 @@ Route::post('/login',[UserController::class, 'login']);
 
 Route::post('/accounts',[AccountController::class, 'create']);
 Route::get('/accounts',[AccountController::class, 'show']);
+
+Route::post('/transactions',[TransactionController::class, 'create']);
