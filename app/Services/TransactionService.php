@@ -5,19 +5,20 @@ namespace App\Services;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class TransactionService{
 
-    public function create($phone, $amount){
-        $status = $this->sufficient_balance($phone, $amount) ? 'Accepted' : 'Rejected';
+    public function create($receiver, $amount, $comment){
+        $status = $this->sufficient_balance($amount) ? 'Accepted' : 'Rejected';
         $sender = auth()->user();
-        $receiver = User::where('phone_number',$phone)->first();
 
         $transaction = Transaction::create([
-            'sender_account_id' => $sender->id, // it's user ID
-            'receiver_account_id' => $receiver->id, // it's user ID
+            'sender_user_id' => $sender->id,
+            'receiver_user_id' => $receiver->id,
             'amount' => $amount,
-            'status' => $status
+            'status' => $status,
+            'comment' => $comment
         ]);
 
         if($transaction && $status == 'Accepted'){
@@ -30,12 +31,14 @@ class TransactionService{
         $sender_account = $sender_user->account;
         $receiver_account = $receiver_user->account;
 
-        $sender_account->update(['balance'=>$sender_account->balance-$amount]);
-        $receiver_account->update(['balance'=>$receiver_account->balance+$amount]);
+        DB::transaction(function () use ($sender_account, $receiver_account, $amount) {
+            $sender_account->decrement('balance', $amount);
+            $receiver_account->increment('balance', $amount);
+        });
     }
 
-    private function sufficient_balance($phone, $amount){
-        if(User::where('phone_number',$phone)->first()->account->balance >= $amount){
+    private function sufficient_balance($amount){
+        if(auth()->user()->account->balance >= $amount){
             return true;
         }
         return false;

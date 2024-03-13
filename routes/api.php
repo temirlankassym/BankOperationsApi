@@ -4,22 +4,29 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\TransactionController;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\AdminController;
+use App\Http\Middleware\IsAdmin;
 
 Route::post('/register',[UserController::class, 'register']);
 Route::post('/login',[UserController::class, 'login']);
+Route::get('/logout',[UserController::class, 'logout']);
 
-Route::post('/accounts',[AccountController::class, 'create']);
-Route::get('/accounts',[AccountController::class, 'show']);
+Route::group(['middleware' => 'jwt.auth'], function (){
+    Route::get('/user',[UserController::class, 'show']);
 
-Route::post('/transactions',[TransactionController::class, 'create']);
+    Route::post('/accounts',[AccountController::class, 'create']);
+    Route::get('/accounts',[AccountController::class, 'show']);
+    Route::delete('/accounts',[AccountController::class, 'destroy']);
+
+    Route::post('/transactions',[TransactionController::class, 'create']);
+    Route::get('/transactions',[TransactionController::class, 'show']);
+
+    Route::get('/transactions',[TransactionController::class, 'show']);
+
+    Route::middleware(IsAdmin::class)->group(function (){
+        Route::post('/block/{user}',[AdminController::class, 'block']);
+        Route::post('/unlock/{user}',[AdminController::class, 'unlock']);
+        Route::get('/accounts/{user}',[AdminController::class, 'show']);
+        Route::delete('/accounts/{user}',[AdminController::class, 'destroy']);
+    });
+});

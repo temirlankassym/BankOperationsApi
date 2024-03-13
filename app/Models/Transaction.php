@@ -10,18 +10,15 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sender_account_id',
-        'receiver_account_id',
+        'sender_user_id',
+        'receiver_user_id',
         'amount',
-        'status'
+        'status',
+        'comment'
     ];
 
-    public function sender_account(){
-        return $this->belongsTo(Account::class);
-    }
-
-    public function receiver_account(){
-        return $this->belongsTo(Account::class);
+    public function account(){
+        return $this->hasOne(Account::class);
     }
 
 }

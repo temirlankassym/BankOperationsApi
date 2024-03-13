@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sender_account_id');
-            $table->unsignedBigInteger('receiver_account_id');
+            $table->unsignedBigInteger('sender_user_id');
+            $table->unsignedBigInteger('receiver_user_id');
             $table->unsignedInteger('amount');
             $table->string('status');
             $table->timestamps();
 
-            $table->foreign('sender_account_id')->references('user_id')->on('accounts');
-            $table->foreign('receiver_account_id')->references('user_id')->on('accounts');
+            $table->foreign('sender_user_id')->references('user_id')->on('accounts');
+            $table->foreign('receiver_user_id')->references('user_id')->on('accounts');
         });
     }
 

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,28 +13,18 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
+    public function register(UserStoreRequest $request)
     {
-
-        //Validated Request
-        //
-        //TO:DO
-
-        User::create([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'phone_number' => $request->input('phone_number'),
-            'password' => Hash::make($request->input('password'))
-        ]);
+        User::create($request->validated());
 
         return response()->json([
             'success' => true,
         ]);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        if (!$token = auth()->attempt($request->only('phone_number', 'password'))) {
+        if (!$token = auth()->attempt($request->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -41,5 +34,18 @@ class UserController extends Controller
                 'token' => $token
             ]
         ]);
+    }
+
+    public function show(){
+        return response()->json([
+            'User' => new UserResource(auth()->user())
+        ]);
+    }
+
+    public function logout(){
+        auth()->logout();
+        return response()->json([
+            'Success'
+        ],204);
     }
 }

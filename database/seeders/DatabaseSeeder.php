@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Bank;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        Bank::create([
+            'name' => 'Kaspi',
+            'code' => 'CASPKZKA'
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Bank::create([
+            'name' => 'Halyk',
+            'code' => 'HSBKKZKX'
+        ]);
+
+        Bank::create([
+            'name' => 'Jusan',
+            'code' => 'TSESKZKA'
+        ]);
     }
 }
