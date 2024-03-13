@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Account;
 use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class TransactionService{

@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionCreateRequest;
 use App\Http\Resources\TransactionResource;
-use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
-use Illuminate\Http\Request;
 use App\Models\Account;
 
 class TransactionController extends Controller
@@ -40,12 +38,9 @@ class TransactionController extends Controller
     }
 
     public function show(){
-        $id = auth()->user()->id;
-        $received = Transaction::where('receiver_user_id',$id)->get();
-        $sent = Transaction::where('sender_user_id',$id)->get();
+        $received = auth()->user()->account->transactions_received;
+        $sent = auth()->user()->account->transactions_sent;
         $transactions = $received->concat($sent)->sortByDesc('created_at');
-
-        //auth()->user()->account->transactions_sent
 
         return response()->json(TransactionResource::collection($transactions));
     }

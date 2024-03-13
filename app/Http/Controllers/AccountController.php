@@ -4,13 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AccountCreateRequest;
 use App\Http\Resources\AccountResource;
-use App\Http\Resources\UserResource;
-use App\Models\Account;
-use App\Models\Bank;
-use App\Models\User;
 use App\Models\Transaction;
 use App\Services\AccountService;
-use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {

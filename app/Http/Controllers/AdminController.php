@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\UserResource;
-use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {

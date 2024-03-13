@@ -22,11 +22,11 @@ class Account extends Model
     }
 
     public function transactions_sent(){
-        return $this->hasMany(Transaction::class, 'sender_user_id');
+        return $this->hasMany(Transaction::class,'sender_user_id','user_id');
     }
 
     public function transactions_received(){
-        return $this->hasMany(Transaction::class, 'receiver_user_id');
+        return $this->hasMany(Transaction::class,'receiver_user_id','user_id');
     }
 
     public function bank(){
