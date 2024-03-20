@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AccountResource;
-use App\Http\Resources\UserResource;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Support\Facades\Redis;
 
 class AdminController extends Controller
 {
@@ -21,9 +21,27 @@ class AdminController extends Controller
         return response()->json(new AccountResource($account));
     }
 
-    public function show(User $user){
+    public function show($id){
+        $user = User::find($id);
+        return $user;
+    }
+
+    public function showFromCache($id){
+        $redis = Redis::get('user:'.$id);
+
+        if($redis){
+            return response()->json([
+                'From Cache',
+                json_decode($redis)
+            ]);
+        }
+
+        $fromDb = $this->show($id);
+        Redis::set('user:'.$id,$fromDb);
+
         return response()->json([
-            'user' => new UserResource($user)
+            'From Database',
+            $fromDb
         ]);
     }
 

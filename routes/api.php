@@ -26,7 +26,7 @@ Route::group(['middleware' => 'jwt.auth'], function (){
     Route::middleware(IsAdmin::class)->group(function (){
         Route::post('/block/{user}',[AdminController::class, 'block']);
         Route::post('/unlock/{user}',[AdminController::class, 'unlock']);
-        Route::get('/accounts/{user}',[AdminController::class, 'show']);
+        Route::get('/accounts/{id}',[AdminController::class, 'showFromCache']);
         Route::delete('/accounts/{user}',[AdminController::class, 'destroy']);
     });
 });
